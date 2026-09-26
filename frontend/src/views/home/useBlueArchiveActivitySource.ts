@@ -37,6 +37,9 @@ const DESCRIPTION_MAX_LENGTH = 200
 /** 只取「活动」；卡池、掉落加倍、维护等分类不进卡片 */
 const WANTED_TYPE = 'Event'
 
+/** 战斗通行证（战令）也被 Kivo 归进「活动」，可它基本整期都在，不算排期 */
+const EXCLUDED_TITLE_KEYWORDS = ['战斗通行证']
+
 /** 三个服与 Kivo 的 line_type 对应关系（国际服的原文拼写就是 Globle） */
 const SERVER_LINE_TYPES: Record<BlueArchiveServerKey, BlueArchiveActivityIn.line_type> = {
   jp: BlueArchiveActivityIn.line_type.JP,
@@ -137,6 +140,7 @@ const buildActivities = (items: KivoTimelineItem[], nowSeconds: number) => {
 
     const name = (item.title ?? '').trim()
     if (!name) continue
+    if (EXCLUDED_TITLE_KEYWORDS.some(keyword => name.includes(keyword))) continue
 
     const existing = picked.get(name)
     if (existing && existing.end >= end) continue
