@@ -13,7 +13,11 @@
           <ShatterText v-if="!isBootstrapping" :text="commandTitle" class="command-title" />
         </div>
         <div v-if="!isBootstrapping" class="command-footer">
-          <a-tooltip :title="t('home.command.refresh')">
+          <a-tooltip
+            :title="t('home.command.refresh')"
+            :open="refreshTipOpen"
+            @open-change="refreshTipOpen = $event"
+          >
             <a-button
               type="text"
               size="small"
@@ -84,7 +88,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { PlayCircleOutlined, ReloadOutlined } from '@ant-design/icons-vue'
 import type { ComboBoxItem } from '@/api'
 import ParticlesBg from '@/components/inspira/ParticlesBg.vue'
@@ -113,6 +117,25 @@ const emit = defineEmits<{
 
 // 靠 key 变化重挂载图标来重放旋转动画，比手动增删 class 稳
 const spinKey = ref(0)
+
+// 提示只认鼠标进出：主页一滚，按钮就从鼠标底下滑走，可鼠标没动，浏览器不会补发
+// mouseleave，提示便一直挂在屏幕上——滚动时自己关掉，鼠标再进按钮才会重新出现。
+const refreshTipOpen = ref(false)
+
+const closeRefreshTip = () => {
+  refreshTipOpen.value = false
+}
+
+watch(refreshTipOpen, open => {
+  if (open) {
+    // 主页内容区的滚动不会冒泡到 window，只能靠捕获阶段拿
+    window.addEventListener('scroll', closeRefreshTip, true)
+  } else {
+    window.removeEventListener('scroll', closeRefreshTip, true)
+  }
+})
+
+onBeforeUnmount(() => window.removeEventListener('scroll', closeRefreshTip, true))
 
 const onRefreshGreeting = () => {
   spinKey.value += 1

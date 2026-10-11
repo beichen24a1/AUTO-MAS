@@ -22,4 +22,11 @@ describe('HomeCommandCard 底栏布局', () => {
     expect(author).toContain('max-width: 100%')
     expect(author).toContain('text-overflow: ellipsis')
   })
+
+  it('提示受控：页面一滚动就关掉，不等鼠标事件', () => {
+    // 滚轮滚动时按钮从鼠标底下滑走，可鼠标没动，浏览器不会补发 mouseleave，
+    // 提示就挂在屏幕上不走。所以提示开着的时候盯住滚动，一滚就关。
+    expect(source).toContain(':open="refreshTipOpen"')
+    expect(source).toContain("addEventListener('scroll', closeRefreshTip, true)")
+  })
 })
