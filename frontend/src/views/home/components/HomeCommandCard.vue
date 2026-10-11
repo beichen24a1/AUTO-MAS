@@ -149,7 +149,8 @@ const commandParticleColor = computed(() => themeColors[themeColor.value])
 .command-main {
   min-width: 0;
   position: relative;
-  padding-bottom: 24px;
+  /* 给底栏留出按钮 + 作者名两行的高度 */
+  padding-bottom: 52px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -181,17 +182,16 @@ const commandParticleColor = computed(() => themeColors[themeColor.value])
   right: 0;
   bottom: 0;
   z-index: 1;
+  /* 刷新按钮压在作者名上方，两者都贴右边：作者名长短只影响它自己向左伸出的宽度，
+     按钮右边不动，鼠标停在按钮上的 tooltip 才不会因为按钮挪位而丢掉 mouseleave。 */
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
 }
 
 .command-author {
-  /* 作者名长短不一，让它吃掉剩余宽度并右对齐；否则整个 footer 会随文字宽窄伸缩，
-     「换一句」按钮被推着左右移动，鼠标停在上面的 tooltip 也就丢掉了 mouseleave。 */
-  flex: 1;
-  min-width: 0;
-  text-align: right;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--ant-color-text-tertiary);
