@@ -34,7 +34,7 @@ import type { MaaFWUserSlotContext } from '@/composables/maafwFlavorTypes'
  * 个人版「灾变防线」：一个全局开关 + 这一期的状态，**整块只在个人版启用后出现**。
  *
  * 状态由后端算（`/maafw/mss/defense-status`）——「这一期」是官网那一篇公告的开始时刻，
- * 那套口径只在编排里有一份，前端不复刻。个人版总开关（`Function.IfPersonalMss`，与设置页
+ * 那套口径只在编排里有一份，前端不复刻。个人版总开关（`Function.IfPersonalMss`，与神秘入口里
  * 那个「并非神秘入口」是同一个字段）也由它一起带回来：没开时这块 UI 不该存在，而为一个
  * 布尔再去读一遍整份全局配置不值得。
  */
